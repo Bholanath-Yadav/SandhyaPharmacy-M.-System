@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "ykWCvmGRVDjEeTmE4Cm-s"
+uri = "file://migration/MIGRATION_GUIDE.md"
+type = "text"
+title = "Migration Guide"
