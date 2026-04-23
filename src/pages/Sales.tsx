@@ -27,6 +27,7 @@ import { Constants } from '@/integrations/supabase/types';
 import { downloadInvoicePDF, InvoiceData } from '@/components/InvoicePDF';
 import { POSSkeleton } from '@/components/pos/POSSkeleton';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
+import { useAppSettings } from '@/hooks/useAppSettings';
 
 type Medicine = Tables<'medicines'>;
 type MedicineBatch = Tables<'medicine_batches'>;
@@ -41,7 +42,6 @@ interface CartItem {
 }
 
 const PAYMENT_METHODS = Constants.public.Enums.payment_method;
-const VAT_RATE = 0.13;
 
 type PharmacyProfile = Tables<'pharmacy_profile'>;
 
@@ -184,6 +184,8 @@ export default function Sales() {
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [pharmacyProfile, setPharmacyProfile] = useState<PharmacyProfile | null>(null);
+  const { data: appSettings } = useAppSettings();
+  const VAT_RATE = appSettings?.vatRate ?? 0.13;
   const [lastInvoice, setLastInvoice] = useState<InvoiceData | null>(null);
   const [isDuePaymentMode, setIsDuePaymentMode] = useState(false);
   const [defaultQty, setDefaultQty] = useState<number>(1);
@@ -261,7 +263,7 @@ export default function Sales() {
     }, 0);
     
     const sub = isVatInclusive ? itemsTotal / (1 + VAT_RATE) : itemsTotal;
-    const vat = sub * VAT_RATE;
+    const vat = isVatInclusive ? itemsTotal - sub : sub * VAT_RATE;
     const tot = sub + vat;
     const previousDue = selectedCustomerData?.current_balance || 0;
     const payable = tot + previousDue;
@@ -269,7 +271,7 @@ export default function Sales() {
     const due = Math.max(0, payable - paid);
     
     return { subtotal: sub, vatAmount: vat, total: tot, totalPayable: payable, remainingDue: due };
-  }, [cart, isVatInclusive, selectedCustomerData, paidAmount]);
+  }, [cart, isVatInclusive, selectedCustomerData, paidAmount, VAT_RATE]);
 
   // Optimized cart operations with useCallback
   // Optimized cart operations with useCallback
@@ -540,7 +542,9 @@ export default function Sales() {
           email: pharmacyProfile?.email,
           vatNumber: pharmacyProfile?.vat_number,
           panNumber: pharmacyProfile?.pan_number,
+          logoUrl: pharmacyProfile?.logo_url,
         },
+        vatRatePercent: appSettings?.vatRatePercent ?? 13,
         customer: customer ? {
           name: customer.name,
           phone: customer.phone,
@@ -1018,7 +1022,7 @@ export default function Sales() {
                     <span>NPR {subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">VAT (13%)</span>
+                    <span className="text-muted-foreground">VAT ({(appSettings?.vatRatePercent ?? 13)}%)</span>
                     <span>NPR {vatAmount.toFixed(2)}</span>
                   </div>
                   <Separator />

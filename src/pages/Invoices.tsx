@@ -179,6 +179,7 @@ export default function Invoices() {
           email: pharmacyProfile?.email,
           vatNumber: pharmacyProfile?.vat_number,
           panNumber: pharmacyProfile?.pan_number,
+          logoUrl: pharmacyProfile?.logo_url,
         },
         customer: invoice.customers
           ? {
@@ -199,6 +200,10 @@ export default function Invoices() {
         })),
         subtotal: invoice.subtotal,
         vatAmount: invoice.vat_amount || 0,
+        vatRatePercent:
+          invoice.subtotal > 0
+            ? Math.round(((invoice.vat_amount || 0) / invoice.subtotal) * 100)
+            : undefined,
         total: invoice.total_amount,
         paidAmount: invoice.paid_amount || 0,
         dueAmount: invoice.due_amount || 0,

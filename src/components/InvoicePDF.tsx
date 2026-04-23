@@ -281,7 +281,9 @@ export interface InvoiceData {
     email?: string | null;
     vatNumber?: string | null;
     panNumber?: string | null;
+    logoUrl?: string | null;
   };
+  vatRatePercent?: number;
   customer?: {
     name: string;
     phone?: string | null;
@@ -314,11 +316,13 @@ const InvoiceDocument = ({ data }: { data: InvoiceData }) => (
         {/* Top Section - Logo and Pharmacy Name */}
         <View style={styles.headerTop}>
           <View style={styles.logoContainer}>
-            <Image style={styles.logo} src={pharmacyLogo} />
+            <Image style={styles.logo} src={data.pharmacy.logoUrl || pharmacyLogo} />
           </View>
           <View style={styles.headerTextContainer}>
             <Text style={styles.pharmacyName}>{data.pharmacy.name}</Text>
-            <Text style={styles.pharmacyTagline}>Mahadeva R.M Baliya - 04 Saptari</Text>
+            {data.pharmacy.address && (
+              <Text style={styles.pharmacyTagline}>{data.pharmacy.address}</Text>
+            )}
           </View>
         </View>
 
@@ -404,7 +408,7 @@ const InvoiceDocument = ({ data }: { data: InvoiceData }) => (
           <Text style={styles.summaryValue}>NPR {data.subtotal.toFixed(2)}</Text>
         </View>
         <View style={styles.summaryRow}>
-          <Text style={styles.summaryLabel}>VAT (13%):</Text>
+          <Text style={styles.summaryLabel}>VAT ({data.vatRatePercent ?? 13}%):</Text>
           <Text style={styles.summaryValue}>NPR {data.vatAmount.toFixed(2)}</Text>
         </View>
         <View style={styles.totalRow}>

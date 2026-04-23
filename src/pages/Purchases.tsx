@@ -62,6 +62,7 @@ import {
 import type { Tables } from '@/integrations/supabase/types';
 import { Constants } from '@/integrations/supabase/types';
 import { format } from 'date-fns';
+import { useAppSettings } from '@/hooks/useAppSettings';
 
 type Purchase = Tables<'purchases'>;
 type Supplier = Tables<'suppliers'>;
@@ -94,7 +95,6 @@ interface PurchaseItemDetail extends PurchaseItemRow {
 type StatusFilter = 'all' | 'paid' | 'partial' | 'due';
 
 const PAYMENT_METHODS = Constants.public.Enums.payment_method;
-const VAT_RATE = 0.13;
 
 const getStatus = (p: Purchase): { label: string; color: string; key: StatusFilter } => {
   const due = p.due_amount || 0;
@@ -239,6 +239,8 @@ export default function Purchases() {
     setItems(items.filter((_, i) => i !== index));
   };
 
+  const { data: appSettings } = useAppSettings();
+  const VAT_RATE = appSettings?.vatRate ?? 0.13;
   const calculateSubtotal = () => items.reduce((sum, item) => sum + item.purchase_price * item.quantity, 0);
   const calculateVAT = () => calculateSubtotal() * VAT_RATE;
   const calculateTotal = () => calculateSubtotal() + calculateVAT();
@@ -686,7 +688,7 @@ export default function Purchases() {
                     <span>NPR {calculateSubtotal().toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>VAT (13%)</span>
+                    <span>VAT ({(appSettings?.vatRatePercent ?? 13)}%)</span>
                     <span>NPR {calculateVAT().toFixed(2)}</span>
                   </div>
                   <Separator />
