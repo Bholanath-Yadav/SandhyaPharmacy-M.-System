@@ -1,0 +1,7 @@
+project_id = "avlchrmuewwploulmiia"
+
+[functions.medicine-assistant]
+verify_jwt = false
+
+[functions.system-reset]
+verify_jwt = false

@@ -1,0 +1,402 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =============================================
+   SANDHYA PHARMACY DESIGN SYSTEM
+   ============================================= */
+
+@layer base {
+  :root {
+    /* Background & Foreground */
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
+
+    /* Card surfaces */
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    /* Popover */
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Primary - Deep Navy Blue (Trust & Professionalism) */
+    --primary: 222 47% 20%;
+    --primary-foreground: 210 40% 98%;
+
+    /* Secondary - Soft Blue Gray */
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 20%;
+
+    /* Muted */
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    /* Accent - Teal Green (Health & Pharmacy) */
+    --accent: 168 76% 36%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* Border & Input */
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 168 76% 36%;
+
+    --radius: 0.75rem;
+
+    /* Custom Pharmacy Colors */
+    --pharmacy-teal: 168 76% 36%;
+    --pharmacy-teal-light: 168 76% 95%;
+    --pharmacy-navy: 222 47% 20%;
+    --pharmacy-navy-light: 222 47% 95%;
+    --pharmacy-success: 142 76% 36%;
+    --pharmacy-warning: 38 92% 50%;
+    --pharmacy-danger: 0 84% 60%;
+    --pharmacy-info: 199 89% 48%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(222, 47%, 20%) 0%, hsl(222, 47%, 35%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(168, 76%, 36%) 0%, hsl(168, 76%, 50%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0, 0%, 100%) 0%, hsl(210, 40%, 98%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(222, 47%, 15%) 0%, hsl(168, 50%, 25%) 100%);
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-glow: 0 0 20px hsl(168, 76%, 36%, 0.3);
+
+    /* Sidebar */
+    --sidebar-background: 222 47% 15%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 168 76% 42%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 222 47% 25%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 222 47% 25%;
+    --sidebar-ring: 168 76% 42%;
+  }
+
+  .dark {
+    --background: 160 30% 6%;
+    --foreground: 150 20% 95%;
+
+    --card: 160 25% 10%;
+    --card-foreground: 150 20% 95%;
+
+    --popover: 160 25% 10%;
+    --popover-foreground: 150 20% 95%;
+
+    --primary: 160 60% 45%;
+    --primary-foreground: 160 30% 6%;
+
+    --secondary: 160 20% 15%;
+    --secondary-foreground: 150 20% 95%;
+
+    --muted: 160 20% 15%;
+    --muted-foreground: 150 15% 60%;
+
+    --accent: 160 60% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 63% 45%;
+    --destructive-foreground: 150 20% 95%;
+
+    --border: 160 25% 18%;
+    --input: 160 25% 18%;
+    --ring: 160 60% 45%;
+
+    /* Glassmorphism specific */
+    --glass: 160 30% 12%;
+    --glass-border: 160 30% 20%;
+    --glass-glow: 160 60% 45%;
+
+    --sidebar-background: 160 30% 8%;
+    --sidebar-foreground: 150 20% 95%;
+    --sidebar-primary: 160 60% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 160 25% 15%;
+    --sidebar-accent-foreground: 150 20% 95%;
+    --sidebar-border: 160 25% 15%;
+    --sidebar-ring: 160 60% 45%;
+
+    /* Gradient accent colors */
+    --gradient-start: 160 60% 45%;
+    --gradient-mid: 38 85% 55%;
+    --gradient-end: 15 85% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Hardware acceleration for smooth animations */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  /* Safe area insets for notched devices */
+  :root {
+    --safe-area-inset-top: env(safe-area-inset-top, 0px);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-inset-left: env(safe-area-inset-left, 0px);
+    --safe-area-inset-right: env(safe-area-inset-right, 0px);
+  }
+
+  /* Better touch targets for mobile */
+  button, a, input, select, textarea {
+    touch-action: manipulation;
+  }
+
+  /* Prevent pull-to-refresh on mobile */
+  body {
+    overscroll-behavior-y: contain;
+  }
+
+  /* Instant scroll for programmatic scrolls */
+  .scroll-instant {
+    scroll-behavior: auto;
+  }
+
+  /* Optimize table rendering */
+  table {
+    table-layout: fixed;
+  }
+
+  /* Remove focus outline lag */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* KPI Card Styles */
+  .kpi-card {
+    @apply relative overflow-hidden rounded-xl bg-card p-6 shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+
+  .kpi-card::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: var(--gradient-accent);
+  }
+
+  .kpi-card:hover::before {
+    @apply opacity-5;
+  }
+
+  /* Stats Counter Animation */
+  .stat-value {
+    @apply text-3xl font-bold tracking-tight;
+  }
+
+  /* Sidebar Active State */
+  .sidebar-item-active {
+    @apply bg-sidebar-accent text-sidebar-accent-foreground;
+  }
+
+  /* POS Input Styles */
+  .pos-input {
+    @apply h-14 text-lg font-medium rounded-lg border-2 border-input focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all;
+  }
+
+  /* Medicine Card */
+  .medicine-card {
+    @apply bg-card rounded-xl p-4 border border-border shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer;
+  }
+
+  .medicine-card:hover {
+    @apply border-accent/50;
+  }
+
+  /* Badge Variants */
+  .badge-success {
+    @apply bg-pharmacy-success/10 text-pharmacy-success border-pharmacy-success/20;
+  }
+
+  .badge-warning {
+    @apply bg-pharmacy-warning/10 text-pharmacy-warning border-pharmacy-warning/20;
+  }
+
+  .badge-danger {
+    @apply bg-pharmacy-danger/10 text-pharmacy-danger border-pharmacy-danger/20;
+  }
+
+  /* Table Row Hover */
+  .table-row-hover {
+    @apply hover:bg-muted/50 transition-colors;
+  }
+
+  /* Glass Effect */
+  .glass {
+    @apply bg-white/80 backdrop-blur-xl border border-white/20;
+  }
+
+  /* Dark Glass Effect */
+  .dark .glass-card {
+    background: linear-gradient(135deg, hsl(160 30% 12% / 0.8) 0%, hsl(160 30% 8% / 0.6) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid hsl(160 30% 25% / 0.3);
+    box-shadow: 
+      0 8px 32px hsl(160 60% 45% / 0.05),
+      inset 0 1px 0 hsl(160 30% 30% / 0.1);
+  }
+
+  .glass-card {
+    background: linear-gradient(135deg, hsl(0 0% 100% / 0.9) 0%, hsl(0 0% 98% / 0.7) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid hsl(0 0% 100% / 0.3);
+  }
+
+  /* Stat card with glow */
+  .dark .stat-card-glow {
+    background: linear-gradient(135deg, hsl(160 30% 14% / 0.9) 0%, hsl(160 30% 10% / 0.7) 100%);
+    backdrop-filter: blur(16px);
+    border: 1px solid hsl(160 30% 25% / 0.4);
+    transition: all 0.3s ease;
+  }
+
+  .dark .stat-card-glow:hover {
+    border-color: hsl(160 60% 45% / 0.5);
+    box-shadow: 0 0 30px hsl(160 60% 45% / 0.15);
+  }
+
+  /* Accent borders for stats */
+  .dark .stat-border-green {
+    border-left: 3px solid hsl(160 60% 45%);
+  }
+
+  .dark .stat-border-orange {
+    border-left: 3px solid hsl(38 85% 55%);
+  }
+
+  .dark .stat-border-coral {
+    border-left: 3px solid hsl(15 85% 55%);
+  }
+
+  .dark .stat-border-blue {
+    border-left: 3px solid hsl(199 89% 48%);
+  }
+}
+
+@layer utilities {
+  /* Animations */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out forwards;
+  }
+
+  .animate-pulse-subtle {
+    animation: pulseSubtle 2s ease-in-out infinite;
+  }
+
+  .animate-count-up {
+    animation: countUp 0.8s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes pulseSubtle {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  @keyframes countUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Stagger delays for animations */
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-400 { animation-delay: 400ms; }
+  .delay-500 { animation-delay: 500ms; }
+
+  /* Custom Scrollbar */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    @apply bg-muted rounded-full;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/30 rounded-full hover:bg-muted-foreground/50;
+  }
+}
