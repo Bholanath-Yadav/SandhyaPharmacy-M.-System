@@ -579,15 +579,13 @@ export default function UserManagement() {
               <Users className="h-5 w-5" />
               User Management
             </CardTitle>
-            <CardDescription>
-              Manage staff accounts and permissions
-              {isMainAdmin && (
-                <Badge variant="outline" className="ml-2 text-amber-600 border-amber-500/30">
-                  <Crown className="h-3 w-3 mr-1" />
-                  Main Admin Access
-                </Badge>
-              )}
-            </CardDescription>
+            <CardDescription>Manage staff accounts and permissions</CardDescription>
+            {isMainAdmin && (
+              <Badge variant="outline" className="mt-2 text-amber-600 border-amber-500/30 w-fit">
+                <Crown className="h-3 w-3 mr-1" />
+                Main Admin Access
+              </Badge>
+            )}
           </div>
           <Dialog open={isDialogOpen} onOpenChange={(open) => {
             setIsDialogOpen(open);

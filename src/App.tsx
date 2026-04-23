@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,23 +8,52 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import AppLayout from "@/components/AppLayout";
-import Auth from "./pages/Auth";
-import Dashboard from "./pages/Dashboard";
-import Medicines from "./pages/Medicines";
-import Sales from "./pages/Sales";
-import Customers from "./pages/Customers";
-import Suppliers from "./pages/Suppliers";
-import Purchases from "./pages/Purchases";
-import Reports from "./pages/Reports";
-import ExpiryAlerts from "./pages/ExpiryAlerts";
-import Settings from "./pages/Settings";
-import Users from "./pages/Users";
-import AIAssistant from "./pages/AIAssistant";
-import Invoices from "./pages/Invoices";
-import Activity from "./pages/Activity";
-import NotFound from "./pages/NotFound";
+import { Loader2 } from "lucide-react";
 
-const queryClient = new QueryClient();
+const Auth = lazy(() => import("./pages/Auth"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Medicines = lazy(() => import("./pages/Medicines"));
+const Sales = lazy(() => import("./pages/Sales"));
+const Customers = lazy(() => import("./pages/Customers"));
+const Suppliers = lazy(() => import("./pages/Suppliers"));
+const Purchases = lazy(() => import("./pages/Purchases"));
+const Reports = lazy(() => import("./pages/Reports"));
+const ExpiryAlerts = lazy(() => import("./pages/ExpiryAlerts"));
+const Settings = lazy(() => import("./pages/Settings"));
+const Users = lazy(() => import("./pages/Users"));
+const AIAssistant = lazy(() => import("./pages/AIAssistant"));
+const Invoices = lazy(() => import("./pages/Invoices"));
+const Activity = lazy(() => import("./pages/Activity"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 30_000,
+      gcTime: 5 * 60_000,
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
+
+function PageFallback() {
+  return (
+    <div className="flex h-[60vh] w-full items-center justify-center">
+      <Loader2 className="h-8 w-8 animate-spin text-accent" />
+    </div>
+  );
+}
+
+const protectedPage = (Page: React.ComponentType) => (
+  <ProtectedRoute>
+    <AppLayout>
+      <Suspense fallback={<PageFallback />}>
+        <Page />
+      </Suspense>
+    </AppLayout>
+  </ProtectedRoute>
+);
 
 function App() {
   return (
@@ -33,25 +62,32 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <BrowserRouter>
+          <BrowserRouter
+            future={{
+              v7_startTransition: true,
+              v7_relativeSplatPath: true,
+            }}
+          >
             <AuthProvider>
-              <Routes>
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/" element={<ProtectedRoute><AppLayout><Dashboard /></AppLayout></ProtectedRoute>} />
-                <Route path="/ai-assistant" element={<ProtectedRoute><AppLayout><AIAssistant /></AppLayout></ProtectedRoute>} />
-                <Route path="/medicines" element={<ProtectedRoute><AppLayout><Medicines /></AppLayout></ProtectedRoute>} />
-                <Route path="/sales" element={<ProtectedRoute><AppLayout><Sales /></AppLayout></ProtectedRoute>} />
-                <Route path="/invoices" element={<ProtectedRoute><AppLayout><Invoices /></AppLayout></ProtectedRoute>} />
-                <Route path="/customers" element={<ProtectedRoute><AppLayout><Customers /></AppLayout></ProtectedRoute>} />
-                <Route path="/suppliers" element={<ProtectedRoute><AppLayout><Suppliers /></AppLayout></ProtectedRoute>} />
-                <Route path="/purchases" element={<ProtectedRoute><AppLayout><Purchases /></AppLayout></ProtectedRoute>} />
-                <Route path="/reports" element={<ProtectedRoute><AppLayout><Reports /></AppLayout></ProtectedRoute>} />
-                <Route path="/expiry-alerts" element={<ProtectedRoute><AppLayout><ExpiryAlerts /></AppLayout></ProtectedRoute>} />
-                <Route path="/activity" element={<ProtectedRoute><AppLayout><Activity /></AppLayout></ProtectedRoute>} />
-                <Route path="/users" element={<ProtectedRoute><AppLayout><Users /></AppLayout></ProtectedRoute>} />
-                <Route path="/settings" element={<ProtectedRoute><AppLayout><Settings /></AppLayout></ProtectedRoute>} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+              <Suspense fallback={<PageFallback />}>
+                <Routes>
+                  <Route path="/auth" element={<Auth />} />
+                  <Route path="/" element={protectedPage(Dashboard)} />
+                  <Route path="/ai-assistant" element={protectedPage(AIAssistant)} />
+                  <Route path="/medicines" element={protectedPage(Medicines)} />
+                  <Route path="/sales" element={protectedPage(Sales)} />
+                  <Route path="/invoices" element={protectedPage(Invoices)} />
+                  <Route path="/customers" element={protectedPage(Customers)} />
+                  <Route path="/suppliers" element={protectedPage(Suppliers)} />
+                  <Route path="/purchases" element={protectedPage(Purchases)} />
+                  <Route path="/reports" element={protectedPage(Reports)} />
+                  <Route path="/expiry-alerts" element={protectedPage(ExpiryAlerts)} />
+                  <Route path="/activity" element={protectedPage(Activity)} />
+                  <Route path="/users" element={protectedPage(Users)} />
+                  <Route path="/settings" element={protectedPage(Settings)} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
             </AuthProvider>
           </BrowserRouter>
         </TooltipProvider>
